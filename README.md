@@ -53,6 +53,23 @@ The system is implemented in Java using Spring Boot for the backend. Java was ch
 
 ---
 
+## Repository Layer
+
+The system uses a repository pattern to abstract all data storage behind interfaces.
+
+### Why Generics
+I used a generic `Repository<T, ID>` interface to avoid duplicating CRUD method signatures across every entity repository. Each entity-specific interface like `BookRepository` extends this base interface and adds domain-specific queries like `findByAuthor()` and `findAvailable()`.
+
+### Why Factory Pattern over Dependency Injection
+I chose the Factory Pattern over Dependency Injection because it is simpler to implement without a framework like Spring. The `RepositoryFactory` acts as a single place where the storage backend is decided. Switching from in-memory to a database in the future only requires changing the factory, nothing else in the codebase needs to change.
+
+| Storage Type | Implementation |
+|-------------|---------------|
+| MEMORY | InMemoryBookRepository, InMemoryMemberRepository etc. |
+| DATABASE | DatabaseBookRepository (stub — future implementation) |
+
+---
+
 ## Project Documentation
 
 | Document                                                   | Description                                                                                                                     |
@@ -106,4 +123,4 @@ The project board uses the Automated Kanban template with two additional columns
 Student: Thato Anikie Mabilo
 Student number: 222148349
 Lecturer: Dr. Boniface Kabaso
-Assignment 10: Smart Library Management System
+Assignment 11: Smart Library Management System
