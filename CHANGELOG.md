@@ -2,6 +2,34 @@
 
 ---
 
+## Assignment 11 — Repository Layer Implementation
+
+### Added
+
+**Repository Interfaces (/src/main/java/repositories)**
+- `Repository.java` — Generic CRUD interface using Java generics to avoid duplication across entity repositories
+- `BookRepository.java` — Entity-specific interface with findByAuthor(), findByGenre(), and findAvailable() methods
+- `MemberRepository.java` — Entity-specific interface with findByEmail() and findByAccountStatus() methods
+- `LoanRepository.java` — Entity-specific interface with findByMemberId(), findByBookId(), findOverdue(), and findByStatus() methods
+- `ReservationRepository.java` — Entity-specific interface with findByMemberId(), findByBookId(), and findByStatus() methods
+- `FineRepository.java` — Entity-specific interface with findByStatus() and findByLoanId() methods
+
+**In-Memory Implementations (/src/main/java/repositories/inmemory)**
+- `InMemoryBookRepository.java` — HashMap-based implementation of BookRepository
+- `InMemoryMemberRepository.java` — HashMap-based implementation of MemberRepository
+- `InMemoryLoanRepository.java` — HashMap-based implementation of LoanRepository
+- `InMemoryReservationRepository.java` — HashMap-based implementation of ReservationRepository
+- `InMemoryFineRepository.java` — HashMap-based implementation of FineRepository
+
+**Factory (/src/main/java/factories)**
+- `RepositoryFactory.java` — Factory that returns the correct repository implementation based on storage type
+- `DatabaseBookRepository.java` — Stub implementation for future MySQL database integration
+
+**Tests (/src/test/java/tests)**
+- `RepositoryTests.java` — 27 unit tests covering CRUD operations, custom queries, edge cases, and factory behaviour for all repositories
+
+---
+
 ## Assignment 10 — Class Implementation and Creational Patterns
 
 ### Added
