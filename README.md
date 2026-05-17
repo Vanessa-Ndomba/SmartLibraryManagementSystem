@@ -70,6 +70,38 @@ I chose the Factory Pattern over Dependency Injection because it is simpler to i
 
 ---
 
+## Service Layer and REST API
+
+The system exposes a RESTful API built with Spring Boot covering three core entities.
+
+### API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/books | Get all books |
+| GET | /api/books/{id} | Get book by ID |
+| POST | /api/books | Add a new book |
+| PUT | /api/books/{id} | Update a book |
+| DELETE | /api/books/{id} | Delete a book |
+| GET | /api/books/available | Get available books |
+| GET | /api/members | Get all members |
+| GET | /api/members/{id} | Get member by ID |
+| POST | /api/members | Register a new member |
+| PUT | /api/members/{id} | Update a member |
+| DELETE | /api/members/{id} | Delete a member |
+| PUT | /api/members/{id}/suspend | Suspend a member |
+| PUT | /api/members/{id}/activate | Activate a member |
+| GET | /api/loans | Get all loans |
+| POST | /api/loans | Issue a book loan |
+| PUT | /api/loans/{id}/return | Process a book return |
+| GET | /api/loans/overdue | Get overdue loans |
+
+### API Documentation
+The full API documentation is available via Swagger UI when the application is running at:
+`http://localhost:8080/swagger-ui/index.html`
+
+---
+
 ## Project Documentation
 
 | Document                                                   | Description                                                                                                                     |
@@ -123,4 +155,4 @@ The project board uses the Automated Kanban template with two additional columns
 Student: Thato Anikie Mabilo
 Student number: 222148349
 Lecturer: Dr. Boniface Kabaso
-Assignment 11: Smart Library Management System
+Assignment 12: Smart Library Management System
