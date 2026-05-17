@@ -2,6 +2,35 @@
 
 ---
 
+## Assignment 12 — Service Layer and REST API Implementation
+
+### Added
+
+**Service Layer (/src/main/java/za/ac/cput/services)**
+- `BookService.java` — Business logic for book management including duplicate prevention and deletion rules
+- `MemberService.java` — Business logic for member management including duplicate email prevention and account status management
+- `LoanService.java` — Business logic for loan management enforcing rules such as suspended member blocking, book availability checks, and 5 active loan limit
+
+**REST API (/src/main/java/za/ac/cput/api)**
+- `BookController.java` — REST endpoints for book CRUD and catalogue queries
+- `MemberController.java` — REST endpoints for member CRUD and account management
+- `LoanController.java` — REST endpoints for issuing loans, processing returns, and querying loan records
+
+**Configuration**
+- `SmartLibraryApplication.java` — Spring Boot main application entry point
+- `RepositoryConfig.java` — Spring bean configuration for repository injection
+- `application.properties` — Server port and Swagger UI configuration
+
+**Tests (/src/test/java/za/ac/cput/services)**
+- `BookServiceTest.java` — 12 unit tests for BookService business logic
+- `MemberServiceTest.java` — 10 unit tests for MemberService business logic
+- `LoanServiceTest.java` — 10 unit tests for LoanService business logic
+
+**API Documentation**
+- SpringDoc OpenAPI auto-generates Swagger UI at http://localhost:8080/swagger-ui.html
+  
+---
+
 ## Assignment 11 — Repository Layer Implementation
 
 ### Added
