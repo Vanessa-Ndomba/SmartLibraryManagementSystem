@@ -72,7 +72,7 @@ I chose the Factory Pattern over Dependency Injection because it is simpler to i
 
 ## CI/CD Pipeline
 
-This project uses GitHub Actions for continuous integration and deployment.
+This system uses GitHub Actions for continuous integration and deployment.
 
 ### How to Run Tests Locally
 1. Make sure Java 21 is installed
