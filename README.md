@@ -70,6 +70,35 @@ I chose the Factory Pattern over Dependency Injection because it is simpler to i
 
 ---
 
+## CI/CD Pipeline
+
+This project uses GitHub Actions for continuous integration and deployment.
+
+### How to Run Tests Locally
+1. Make sure Java 21 is installed
+2. Clone the repository
+3. Run `mvn test` in the root directory
+4. Test results will appear in the console
+5. JaCoCo coverage report will be generated at `target/site/jacoco/index.html`
+
+### How the CI/CD Pipeline Works
+
+**CI — Runs on every push and pull request:**
+- Sets up Java 21
+- Caches Maven dependencies for faster runs
+- Runs all 81 unit and integration tests
+- Uploads test results and JaCoCo coverage report as artifacts
+- Blocks pull request merges if any test fails
+
+**CD — Runs only when code is merged to main:**
+- Builds a release JAR using `mvn package`
+- Uploads the JAR as a downloadable artifact in GitHub Actions
+
+### Branch Protection
+The `main` branch is protected. See [PROTECTION.md](./PROTECTION.md) for more details.
+
+---
+
 ## Service Layer and REST API
 
 The system exposes a RESTful API built with Spring Boot covering three core entities.
@@ -155,4 +184,4 @@ The project board uses the Automated Kanban template with two additional columns
 Student: Thato Anikie Mabilo
 Student number: 222148349
 Lecturer: Dr. Boniface Kabaso
-Assignment 12: Smart Library Management System
+Assignment 13: Smart Library Management System
