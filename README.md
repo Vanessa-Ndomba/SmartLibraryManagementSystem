@@ -118,6 +118,7 @@ This system uses GitHub Actions for continuous integration and deployment.
 4. Test results will appear in the console
 5. JaCoCo coverage report will be generated at `target/site/jacoco/index.html`
 
+
 ### How the CI/CD Pipeline Works
 
 **CI — Runs on every push and pull request:**
@@ -130,6 +131,7 @@ This system uses GitHub Actions for continuous integration and deployment.
 **CD — Runs only when code is merged to main:**
 - Builds a release JAR using `mvn package`
 - Uploads the JAR as a downloadable artifact in GitHub Actions
+
 
 ### Branch Protection
 The `main` branch is protected. See [PROTECTION.md](./PROTECTION.md) for more details.
