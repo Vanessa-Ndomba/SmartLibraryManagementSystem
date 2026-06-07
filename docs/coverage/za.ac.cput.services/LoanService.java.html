@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoanService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartLibraryManagementSystem</a> &gt; <a href="index.source.html" class="el_package">za.ac.cput.services</a> &gt; <span class="el_source">LoanService.java</span></div><h1>LoanService.java</h1><pre class="source lang-java linenums">package za.ac.cput.services;
+
+import org.springframework.stereotype.Service;
+import za.ac.cput.domain.*;
+import za.ac.cput.repositories.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+
+@Service
+public class LoanService {
+
+    private final LoanRepository loanRepository;
+    private final BookRepository bookRepository;
+    private final MemberRepository memberRepository;
+    private final FineRepository fineRepository;
+
+    public LoanService(LoanRepository loanRepository,
+                       BookRepository bookRepository,
+                       MemberRepository memberRepository,
+<span class="fc" id="L23">                       FineRepository fineRepository) {</span>
+<span class="fc" id="L24">        this.loanRepository = loanRepository;</span>
+<span class="fc" id="L25">        this.bookRepository = bookRepository;</span>
+<span class="fc" id="L26">        this.memberRepository = memberRepository;</span>
+<span class="fc" id="L27">        this.fineRepository = fineRepository;</span>
+<span class="fc" id="L28">    }</span>
+
+    public Loan issueLoan(String memberId, String bookId) {
+<span class="fc" id="L31">        Member member = memberRepository.findById(memberId)</span>
+<span class="fc" id="L32">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Member not found: &quot; + memberId));</span>
+
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (member.getAccountStatus().equals(&quot;SUSPENDED&quot;)) {</span>
+<span class="fc" id="L35">            throw new IllegalStateException(&quot;Member account is suspended. Cannot issue loan.&quot;);</span>
+        }
+
+<span class="fc" id="L38">        Book book = bookRepository.findById(bookId)</span>
+<span class="fc" id="L39">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Book not found: &quot; + bookId));</span>
+
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (!book.checkAvailability()) {</span>
+<span class="fc" id="L42">            throw new IllegalStateException(&quot;No available copies for book: &quot; + bookId);</span>
+        }
+
+<span class="fc" id="L45">        long activeLoanCount = loanRepository.findByMemberId(memberId).stream()</span>
+<span class="fc" id="L46">                .filter(l -&gt; l.getStatus().equals(&quot;ACTIVE&quot;))</span>
+<span class="fc" id="L47">                .count();</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (activeLoanCount &gt;= 5) {</span>
+<span class="fc" id="L49">            throw new IllegalStateException(&quot;Member has reached the maximum of 5 active loans.&quot;);</span>
+        }
+
+<span class="fc" id="L52">        String loanId = &quot;L-&quot; + UUID.randomUUID().toString().substring(0, 8).toUpperCase();</span>
+<span class="fc" id="L53">        Loan loan = new Loan(loanId, member, book);</span>
+<span class="fc" id="L54">        loan.issueLoan();</span>
+<span class="fc" id="L55">        loanRepository.save(loan);</span>
+<span class="fc" id="L56">        return loan;</span>
+    }
+
+    public Loan processReturn(String loanId) {
+<span class="fc" id="L60">        Loan loan = loanRepository.findById(loanId)</span>
+<span class="fc" id="L61">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Loan not found: &quot; + loanId));</span>
+
+<span class="fc" id="L63">        loan.processReturn();</span>
+
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (loan.getFineAmount() &gt; 0) {</span>
+<span class="nc" id="L66">            String fineId = &quot;F-&quot; + UUID.randomUUID().toString().substring(0, 8).toUpperCase();</span>
+<span class="nc" id="L67">            Fine fine = new Fine(fineId, loan, loan.getFineAmount());</span>
+<span class="nc" id="L68">            fineRepository.save(fine);</span>
+<span class="nc" id="L69">            loan.getMember().setFineBalance(loan.getMember().getFineBalance() + loan.getFineAmount());</span>
+<span class="nc" id="L70">            memberRepository.save(loan.getMember());</span>
+        }
+
+<span class="fc" id="L73">        loanRepository.save(loan);</span>
+<span class="fc" id="L74">        return loan;</span>
+    }
+
+    public List&lt;Loan&gt; getAllLoans() {
+<span class="fc" id="L78">        return loanRepository.findAll();</span>
+    }
+
+    public Optional&lt;Loan&gt; getLoanById(String loanId) {
+<span class="nc" id="L82">        return loanRepository.findById(loanId);</span>
+    }
+
+    public List&lt;Loan&gt; getLoansByMember(String memberId) {
+<span class="fc" id="L86">        return loanRepository.findByMemberId(memberId);</span>
+    }
+
+    public List&lt;Loan&gt; getOverdueLoans() {
+<span class="nc" id="L90">        return loanRepository.findOverdue();</span>
+    }
+
+    public List&lt;Loan&gt; getLoansByStatus(String status) {
+<span class="nc" id="L94">        return loanRepository.findByStatus(status);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

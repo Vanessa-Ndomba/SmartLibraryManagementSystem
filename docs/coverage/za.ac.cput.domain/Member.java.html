@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Member.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartLibraryManagementSystem</a> &gt; <a href="index.source.html" class="el_package">za.ac.cput.domain</a> &gt; <span class="el_source">Member.java</span></div><h1>Member.java</h1><pre class="source lang-java linenums">package za.ac.cput.domain;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Member extends UserAccount {
+    private String fullName;
+    private double fineBalance;
+    private String accountStatus;
+    private List&lt;Loan&gt; loans;
+    private List&lt;Reservation&gt; reservations;
+
+    public Member(String userId, String fullName, String email, String passwordHash) {
+<span class="fc" id="L14">        super(userId, email, passwordHash, &quot;MEMBER&quot;);</span>
+<span class="fc" id="L15">        this.fullName = fullName;</span>
+<span class="fc" id="L16">        this.fineBalance = 0.0;</span>
+<span class="fc" id="L17">        this.accountStatus = &quot;ACTIVE&quot;;</span>
+<span class="fc" id="L18">        this.loans = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L19">        this.reservations = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L20">    }</span>
+
+    public void register() {
+<span class="nc" id="L23">        this.accountStatus = &quot;ACTIVE&quot;;</span>
+<span class="nc" id="L24">        System.out.println(&quot;Member registered: &quot; + fullName);</span>
+<span class="nc" id="L25">    }</span>
+
+    public String login(String passwordHash) {
+<span class="nc bnc" id="L28" title="All 2 branches missed.">        if (authenticate(passwordHash)) {</span>
+<span class="nc" id="L29">            return generateToken();</span>
+        }
+<span class="nc" id="L31">        return null;</span>
+    }
+
+    public List&lt;Book&gt; searchBooks(String query) {
+<span class="nc" id="L35">        System.out.println(&quot;Searching for: &quot; + query);</span>
+<span class="nc" id="L36">        return new ArrayList&lt;&gt;();</span>
+    }
+
+    public void reserveBook(String bookId) {
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (!accountStatus.equals(&quot;SUSPENDED&quot;)) {</span>
+<span class="nc" id="L41">            System.out.println(&quot;Reservation placed for book: &quot; + bookId);</span>
+        } else {
+<span class="nc" id="L43">            System.out.println(&quot;Cannot reserve. Account is suspended.&quot;);</span>
+        }
+<span class="nc" id="L45">    }</span>
+
+    public List&lt;Loan&gt; viewBorrowingHistory() {
+<span class="nc" id="L48">        return loans;</span>
+    }
+
+    public double viewFines() {
+<span class="nc" id="L52">        return fineBalance;</span>
+    }
+
+    public void addLoan(Loan loan) {
+<span class="fc" id="L56">        loans.add(loan);</span>
+<span class="fc" id="L57">    }</span>
+
+    public void addReservation(Reservation reservation) {
+<span class="nc" id="L60">        reservations.add(reservation);</span>
+<span class="nc" id="L61">    }</span>
+
+    public String getFullName() {
+<span class="fc" id="L64">        return fullName; }</span>
+
+    public void setFullName(String fullName) {
+<span class="nc" id="L67">        this.fullName = fullName; }</span>
+
+    public double getFineBalance() {
+<span class="nc" id="L70">        return fineBalance; }</span>
+
+    public void setFineBalance(double fineBalance) {
+<span class="nc" id="L73">        this.fineBalance = fineBalance; }</span>
+
+    public String getAccountStatus() {
+<span class="fc" id="L76">        return accountStatus; }</span>
+
+    public void setAccountStatus(String accountStatus) {
+<span class="fc" id="L79">        this.accountStatus = accountStatus; }</span>
+
+    public List&lt;Loan&gt; getLoans() {
+<span class="nc" id="L82">        return loans; }</span>
+
+    public List&lt;Reservation&gt; getReservations() {
+<span class="nc" id="L85">        return reservations; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

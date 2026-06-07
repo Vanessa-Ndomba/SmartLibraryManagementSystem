@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartLibraryManagementSystem</a> &gt; <a href="index.source.html" class="el_package">za.ac.cput.services</a> &gt; <span class="el_source">BookService.java</span></div><h1>BookService.java</h1><pre class="source lang-java linenums">package za.ac.cput.services;
+
+import org.springframework.stereotype.Service;
+import za.ac.cput.domain.Book;
+import za.ac.cput.repositories.BookRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class BookService {
+
+    private final BookRepository bookRepository;
+
+<span class="fc" id="L15">    public BookService(BookRepository bookRepository) {</span>
+<span class="fc" id="L16">        this.bookRepository = bookRepository;</span>
+<span class="fc" id="L17">    }</span>
+
+    public Book addBook(Book book) {
+<span class="pc bpc" id="L20" title="2 of 6 branches missed.">        if (book.getBookId() == null || book.getTitle() == null || book.getISBN() == null) {</span>
+<span class="fc" id="L21">            throw new IllegalArgumentException(&quot;Book ID, title, and ISBN are required.&quot;);</span>
+        }
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (bookRepository.findById(book.getBookId()).isPresent()) {</span>
+<span class="fc" id="L24">            throw new IllegalStateException(&quot;A book with ID &quot; + book.getBookId() + &quot; already exists.&quot;);</span>
+        }
+<span class="fc" id="L26">        bookRepository.save(book);</span>
+<span class="fc" id="L27">        return book;</span>
+    }
+
+    public List&lt;Book&gt; getAllBooks() {
+<span class="fc" id="L31">        return bookRepository.findAll();</span>
+    }
+
+    public Optional&lt;Book&gt; getBookById(String bookId) {
+<span class="fc" id="L35">        return bookRepository.findById(bookId);</span>
+    }
+
+    public Book updateBook(String bookId, String title, String author) {
+<span class="fc" id="L39">        Book book = bookRepository.findById(bookId)</span>
+<span class="fc" id="L40">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Book not found: &quot; + bookId));</span>
+<span class="fc" id="L41">        book.updateDetails(title, author);</span>
+<span class="fc" id="L42">        bookRepository.save(book);</span>
+<span class="fc" id="L43">        return book;</span>
+    }
+
+    public void deleteBook(String bookId) {
+<span class="fc" id="L47">        Book book = bookRepository.findById(bookId)</span>
+<span class="fc" id="L48">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Book not found: &quot; + bookId));</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (book.getAvailableCopies() &lt; book.getTotalCopies()) {</span>
+<span class="fc" id="L50">            throw new IllegalStateException(&quot;Cannot delete a book that has active loans.&quot;);</span>
+        }
+<span class="fc" id="L52">        bookRepository.delete(bookId);</span>
+<span class="fc" id="L53">    }</span>
+
+    public List&lt;Book&gt; getAvailableBooks() {
+<span class="fc" id="L56">        return bookRepository.findAvailable();</span>
+    }
+
+    public List&lt;Book&gt; getBooksByAuthor(String author) {
+<span class="nc" id="L60">        return bookRepository.findByAuthor(author);</span>
+    }
+
+    public List&lt;Book&gt; getBooksByGenre(String genre) {
+<span class="nc" id="L64">        return bookRepository.findByGenre(genre);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

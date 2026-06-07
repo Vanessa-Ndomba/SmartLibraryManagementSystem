@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MemberController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartLibraryManagementSystem</a> &gt; <a href="index.source.html" class="el_package">za.ac.cput.api</a> &gt; <span class="el_source">MemberController.java</span></div><h1>MemberController.java</h1><pre class="source lang-java linenums">package za.ac.cput.api;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import za.ac.cput.domain.Member;
+import za.ac.cput.services.MemberService;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping(&quot;/api/members&quot;)
+@Tag(name = &quot;Members&quot;, description = &quot;Endpoints for managing library members&quot;)
+public class MemberController {
+
+    private final MemberService memberService;
+
+<span class="nc" id="L23">    public MemberController(MemberService memberService) {</span>
+<span class="nc" id="L24">        this.memberService = memberService;</span>
+<span class="nc" id="L25">    }</span>
+
+    @GetMapping
+    @Operation(summary = &quot;Get all members&quot;, description = &quot;Returns a list of all registered members&quot;)
+    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Successfully retrieved all members&quot;)
+    public ResponseEntity&lt;List&lt;Member&gt;&gt; getAllMembers() {
+<span class="nc" id="L31">        return ResponseEntity.ok(memberService.getAllMembers());</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    @Operation(summary = &quot;Get member by ID&quot;, description = &quot;Returns a single member by their ID&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Member found&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Member not found&quot;)
+    })
+    public ResponseEntity&lt;?&gt; getMemberById(@PathVariable String id) {
+<span class="nc" id="L41">        return memberService.getMemberById(id)</span>
+<span class="nc" id="L42">                .&lt;ResponseEntity&lt;?&gt;&gt;map(ResponseEntity::ok)</span>
+<span class="nc" id="L43">                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)</span>
+<span class="nc" id="L44">                        .body(Map.of(&quot;error&quot;, &quot;Member not found: &quot; + id)));</span>
+    }
+
+    @PostMapping
+    @Operation(summary = &quot;Register a new member&quot;, description = &quot;Registers a new library member&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Member registered successfully&quot;),
+            @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Invalid input or duplicate email&quot;)
+    })
+    public ResponseEntity&lt;?&gt; registerMember(@RequestBody Member member) {
+        try {
+<span class="nc" id="L55">            Member created = memberService.registerMember(member);</span>
+<span class="nc" id="L56">            return ResponseEntity.status(HttpStatus.CREATED).body(created);</span>
+<span class="nc" id="L57">        } catch (IllegalArgumentException | IllegalStateException e) {</span>
+<span class="nc" id="L58">            return ResponseEntity.badRequest().body(Map.of(&quot;error&quot;, e.getMessage()));</span>
+        }
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    @Operation(summary = &quot;Update a member&quot;, description = &quot;Updates the full name and email of an existing member&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Member updated successfully&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Member not found&quot;)
+    })
+    public ResponseEntity&lt;?&gt; updateMember(@PathVariable String id,
+                                          @RequestParam String fullName,
+                                          @RequestParam String email) {
+        try {
+<span class="nc" id="L72">            Member updated = memberService.updateMember(id, fullName, email);</span>
+<span class="nc" id="L73">            return ResponseEntity.ok(updated);</span>
+<span class="nc" id="L74">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L75">            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(&quot;error&quot;, e.getMessage()));</span>
+        }
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    @Operation(summary = &quot;Delete a member&quot;, description = &quot;Deletes a member account&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Member deleted successfully&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Member not found&quot;)
+    })
+    public ResponseEntity&lt;?&gt; deleteMember(@PathVariable String id) {
+        try {
+<span class="nc" id="L87">            memberService.deleteMember(id);</span>
+<span class="nc" id="L88">            return ResponseEntity.ok(Map.of(&quot;message&quot;, &quot;Member deleted successfully: &quot; + id));</span>
+<span class="nc" id="L89">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L90">            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(&quot;error&quot;, e.getMessage()));</span>
+        }
+    }
+
+    @PutMapping(&quot;/{id}/suspend&quot;)
+    @Operation(summary = &quot;Suspend a member&quot;, description = &quot;Suspends a member account preventing further borrowing&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Member suspended successfully&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Member not found&quot;)
+    })
+    public ResponseEntity&lt;?&gt; suspendMember(@PathVariable String id) {
+        try {
+<span class="nc" id="L102">            Member member = memberService.suspendMember(id);</span>
+<span class="nc" id="L103">            return ResponseEntity.ok(member);</span>
+<span class="nc" id="L104">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L105">            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(&quot;error&quot;, e.getMessage()));</span>
+        }
+    }
+
+    @PutMapping(&quot;/{id}/activate&quot;)
+    @Operation(summary = &quot;Activate a member&quot;, description = &quot;Reactivates a suspended member account&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Member activated successfully&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Member not found&quot;)
+    })
+    public ResponseEntity&lt;?&gt; activateMember(@PathVariable String id) {
+        try {
+<span class="nc" id="L117">            Member member = memberService.activateMember(id);</span>
+<span class="nc" id="L118">            return ResponseEntity.ok(member);</span>
+<span class="nc" id="L119">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L120">            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(&quot;error&quot;, e.getMessage()));</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

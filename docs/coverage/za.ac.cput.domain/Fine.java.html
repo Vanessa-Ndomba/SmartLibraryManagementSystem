@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Fine.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartLibraryManagementSystem</a> &gt; <a href="index.source.html" class="el_package">za.ac.cput.domain</a> &gt; <span class="el_source">Fine.java</span></div><h1>Fine.java</h1><pre class="source lang-java linenums">package za.ac.cput.domain;
+
+import java.time.LocalDate;
+
+public class Fine {
+    private String fineId;
+    private double amount;
+    private String status;
+    private LocalDate createdDate;
+    private LocalDate paidDate;
+    private Loan loan;
+
+<span class="fc" id="L13">    public Fine(String fineId, Loan loan, double amount) {</span>
+<span class="fc" id="L14">        this.fineId = fineId;</span>
+<span class="fc" id="L15">        this.loan = loan;</span>
+<span class="fc" id="L16">        this.amount = amount;</span>
+<span class="fc" id="L17">        this.createdDate = LocalDate.now();</span>
+<span class="fc" id="L18">        this.status = &quot;OUTSTANDING&quot;;</span>
+<span class="fc" id="L19">    }</span>
+
+    public double calculateAmount() {
+<span class="nc" id="L22">        return loan.calculateFine();</span>
+    }
+
+    public void markAsPaid() {
+<span class="nc" id="L26">        this.status = &quot;PAID&quot;;</span>
+<span class="nc" id="L27">        this.paidDate = LocalDate.now();</span>
+<span class="nc" id="L28">        System.out.println(&quot;Fine marked as paid: &quot; + fineId);</span>
+<span class="nc" id="L29">    }</span>
+
+    public void waiveFine() {
+<span class="nc" id="L32">        this.status = &quot;WAIVED&quot;;</span>
+<span class="nc" id="L33">        System.out.println(&quot;Fine waived: &quot; + fineId);</span>
+<span class="nc" id="L34">    }</span>
+
+    public String getFineId() {
+<span class="fc" id="L37">        return fineId; }</span>
+
+    public double getAmount() {
+<span class="fc" id="L40">        return amount; }</span>
+
+    public String getStatus() {
+<span class="fc" id="L43">        return status; }</span>
+
+    public LocalDate getCreatedDate() {
+<span class="nc" id="L46">        return createdDate; }</span>
+
+    public LocalDate getPaidDate() {
+<span class="nc" id="L49">        return paidDate; }</span>
+
+    public Loan getLoan() {
+<span class="nc" id="L52">        return loan; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

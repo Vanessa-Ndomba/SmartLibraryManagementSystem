@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Reservation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartLibraryManagementSystem</a> &gt; <a href="index.source.html" class="el_package">za.ac.cput.domain</a> &gt; <span class="el_source">Reservation.java</span></div><h1>Reservation.java</h1><pre class="source lang-java linenums">package za.ac.cput.domain;
+
+import java.time.LocalDate;
+
+public class Reservation {
+    private String reservationId;
+    private LocalDate reservationDate;
+    private String status;
+    private int queuePosition;
+    private Member member;
+    private Book book;
+
+<span class="fc" id="L13">    public Reservation(String reservationId, Member member, Book book, int queuePosition) {</span>
+<span class="fc" id="L14">        this.reservationId = reservationId;</span>
+<span class="fc" id="L15">        this.member = member;</span>
+<span class="fc" id="L16">        this.book = book;</span>
+<span class="fc" id="L17">        this.reservationDate = LocalDate.now();</span>
+<span class="fc" id="L18">        this.status = &quot;PENDING&quot;;</span>
+<span class="fc" id="L19">        this.queuePosition = queuePosition;</span>
+<span class="fc" id="L20">    }</span>
+
+    public void placeReservation() {
+<span class="nc bnc" id="L23" title="All 2 branches missed.">        if (!book.checkAvailability()) {</span>
+<span class="nc" id="L24">            member.addReservation(this);</span>
+<span class="nc" id="L25">            System.out.println(&quot;Reservation placed. Queue position: &quot; + queuePosition);</span>
+        } else {
+<span class="nc" id="L27">            System.out.println(&quot;Book is available. No reservation needed.&quot;);</span>
+        }
+<span class="nc" id="L29">    }</span>
+
+    public void cancelReservation() {
+<span class="nc" id="L32">        this.status = &quot;CANCELLED&quot;;</span>
+<span class="nc" id="L33">        System.out.println(&quot;Reservation cancelled: &quot; + reservationId);</span>
+<span class="nc" id="L34">    }</span>
+
+    public void markAsReady() {
+<span class="nc" id="L37">        this.status = &quot;READY&quot;;</span>
+<span class="nc" id="L38">        System.out.println(&quot;Reservation is ready for pickup: &quot; + reservationId);</span>
+<span class="nc" id="L39">    }</span>
+
+    public void markAsFulfilled() {
+<span class="nc" id="L42">        this.status = &quot;FULFILLED&quot;;</span>
+<span class="nc" id="L43">        System.out.println(&quot;Reservation fulfilled: &quot; + reservationId);</span>
+<span class="nc" id="L44">    }</span>
+
+    public String getReservationId() {
+<span class="fc" id="L47">        return reservationId; }</span>
+
+    public String getStatus() {
+<span class="fc" id="L50">        return status; }</span>
+
+    public int getQueuePosition() {
+<span class="nc" id="L53">        return queuePosition; }</span>
+
+    public Member getMember() {
+<span class="fc" id="L56">        return member; }</span>
+
+    public Book getBook() {
+<span class="nc" id="L59">        return book; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

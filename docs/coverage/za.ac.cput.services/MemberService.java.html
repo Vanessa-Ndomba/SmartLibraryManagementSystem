@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MemberService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartLibraryManagementSystem</a> &gt; <a href="index.source.html" class="el_package">za.ac.cput.services</a> &gt; <span class="el_source">MemberService.java</span></div><h1>MemberService.java</h1><pre class="source lang-java linenums">package za.ac.cput.services;
+
+import org.springframework.stereotype.Service;
+import za.ac.cput.domain.Member;
+import za.ac.cput.repositories.MemberRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class MemberService {
+
+    private final MemberRepository memberRepository;
+
+<span class="fc" id="L15">    public MemberService(MemberRepository memberRepository) {</span>
+<span class="fc" id="L16">        this.memberRepository = memberRepository;</span>
+<span class="fc" id="L17">    }</span>
+
+    public Member registerMember(Member member) {
+<span class="pc bpc" id="L20" title="2 of 6 branches missed.">        if (member.getUserId() == null || member.getEmail() == null || member.getFullName() == null) {</span>
+<span class="fc" id="L21">            throw new IllegalArgumentException(&quot;Member ID, email, and full name are required.&quot;);</span>
+        }
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (memberRepository.findByEmail(member.getEmail()).isPresent()) {</span>
+<span class="fc" id="L24">            throw new IllegalStateException(&quot;A member with email &quot; + member.getEmail() + &quot; already exists.&quot;);</span>
+        }
+<span class="fc" id="L26">        memberRepository.save(member);</span>
+<span class="fc" id="L27">        return member;</span>
+    }
+
+    public List&lt;Member&gt; getAllMembers() {
+<span class="fc" id="L31">        return memberRepository.findAll();</span>
+    }
+
+    public Optional&lt;Member&gt; getMemberById(String memberId) {
+<span class="fc" id="L35">        return memberRepository.findById(memberId);</span>
+    }
+
+    public Optional&lt;Member&gt; getMemberByEmail(String email) {
+<span class="nc" id="L39">        return memberRepository.findByEmail(email);</span>
+    }
+
+    public Member updateMember(String memberId, String fullName, String email) {
+<span class="nc" id="L43">        Member member = memberRepository.findById(memberId)</span>
+<span class="nc" id="L44">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Member not found: &quot; + memberId));</span>
+<span class="nc" id="L45">        member.setFullName(fullName);</span>
+<span class="nc" id="L46">        member.setEmail(email);</span>
+<span class="nc" id="L47">        memberRepository.save(member);</span>
+<span class="nc" id="L48">        return member;</span>
+    }
+
+    public void deleteMember(String memberId) {
+<span class="fc" id="L52">        memberRepository.findById(memberId)</span>
+<span class="fc" id="L53">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Member not found: &quot; + memberId));</span>
+<span class="fc" id="L54">        memberRepository.delete(memberId);</span>
+<span class="fc" id="L55">    }</span>
+
+    public Member suspendMember(String memberId) {
+<span class="fc" id="L58">        Member member = memberRepository.findById(memberId)</span>
+<span class="pc" id="L59">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Member not found: &quot; + memberId));</span>
+<span class="fc" id="L60">        member.setAccountStatus(&quot;SUSPENDED&quot;);</span>
+<span class="fc" id="L61">        memberRepository.save(member);</span>
+<span class="fc" id="L62">        return member;</span>
+    }
+
+    public Member activateMember(String memberId) {
+<span class="fc" id="L66">        Member member = memberRepository.findById(memberId)</span>
+<span class="pc" id="L67">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Member not found: &quot; + memberId));</span>
+<span class="fc" id="L68">        member.setAccountStatus(&quot;ACTIVE&quot;);</span>
+<span class="fc" id="L69">        memberRepository.save(member);</span>
+<span class="fc" id="L70">        return member;</span>
+    }
+
+    public List&lt;Member&gt; getMembersByStatus(String status) {
+<span class="nc" id="L74">        return memberRepository.findByAccountStatus(status);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

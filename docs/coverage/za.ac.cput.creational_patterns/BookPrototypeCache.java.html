@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookPrototypeCache.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartLibraryManagementSystem</a> &gt; <a href="index.source.html" class="el_package">za.ac.cput.creational_patterns</a> &gt; <span class="el_source">BookPrototypeCache.java</span></div><h1>BookPrototypeCache.java</h1><pre class="source lang-java linenums">package za.ac.cput.creational_patterns;
+
+import za.ac.cput.domain.Book;
+import java.util.HashMap;
+import java.util.Map;
+
+<span class="nc" id="L7">public class BookPrototypeCache {</span>
+<span class="fc" id="L8">    private static Map&lt;String, Book&gt; cache = new HashMap&lt;&gt;();</span>
+
+    public static void loadCache() {
+<span class="fc" id="L11">        Book academicTemplate = new Book(</span>
+                &quot;TEMPLATE-001&quot;,
+                &quot;Academic Textbook Template&quot;,
+                &quot;Unknown Author&quot;,
+                &quot;000&quot;,
+                &quot;Academic&quot;,
+                2024,
+                3
+        );
+<span class="fc" id="L20">        cache.put(&quot;ACADEMIC&quot;, academicTemplate);</span>
+
+<span class="fc" id="L22">        Book fictionTemplate = new Book(</span>
+                &quot;TEMPLATE-002&quot;,
+                &quot;Fiction Novel Template&quot;,
+                &quot;Unknown Author&quot;,
+                &quot;001&quot;,
+                &quot;Fiction&quot;,
+                2024,
+                5
+        );
+<span class="fc" id="L31">        cache.put(&quot;FICTION&quot;, fictionTemplate);</span>
+
+<span class="fc" id="L33">        Book referenceTemplate = new Book(</span>
+                &quot;TEMPLATE-003&quot;,
+                &quot;Reference Book Template&quot;,
+                &quot;Unknown Author&quot;,
+                &quot;002&quot;,
+                &quot;Reference&quot;,
+                2024,
+                2
+        );
+<span class="fc" id="L42">        cache.put(&quot;REFERENCE&quot;, referenceTemplate);</span>
+<span class="fc" id="L43">    }</span>
+
+    public static Book getClone(String type, String newBookId, String newTitle, String newAuthor, String newISBN) {
+<span class="fc" id="L46">        Book template = cache.get(type.toUpperCase());</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (template == null) {</span>
+<span class="fc" id="L48">            throw new IllegalArgumentException(&quot;Oops, no template found for type: &quot; + type);</span>
+        }
+
+<span class="fc" id="L51">        return new Book(</span>
+                newBookId,
+                newTitle,
+                newAuthor,
+                newISBN,
+<span class="fc" id="L56">                template.getGenre(),</span>
+<span class="fc" id="L57">                template.getYearPublished(),</span>
+<span class="fc" id="L58">                template.getTotalCopies()</span>
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

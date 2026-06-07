@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InMemoryBookRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartLibraryManagementSystem</a> &gt; <a href="index.source.html" class="el_package">za.ac.cput.repositories.inmemory</a> &gt; <span class="el_source">InMemoryBookRepository.java</span></div><h1>InMemoryBookRepository.java</h1><pre class="source lang-java linenums">package za.ac.cput.repositories.inmemory;
+
+import za.ac.cput.domain.Book;
+import za.ac.cput.repositories.BookRepository;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+<span class="fc" id="L9">public class InMemoryBookRepository implements BookRepository {</span>
+
+<span class="fc" id="L11">    private final Map&lt;String, Book&gt; storage = new HashMap&lt;&gt;();</span>
+
+    @Override
+    public void save(Book book) {
+<span class="fc" id="L15">        storage.put(book.getBookId(), book);</span>
+<span class="fc" id="L16">    }</span>
+
+    @Override
+    public Optional&lt;Book&gt; findById(String id) {
+<span class="fc" id="L20">        return Optional.ofNullable(storage.get(id));</span>
+    }
+
+    @Override
+    public List&lt;Book&gt; findAll() {
+<span class="fc" id="L25">        return new ArrayList&lt;&gt;(storage.values());</span>
+    }
+
+    @Override
+    public void delete(String id) {
+<span class="fc" id="L30">        storage.remove(id);</span>
+<span class="fc" id="L31">    }</span>
+
+    @Override
+    public List&lt;Book&gt; findByAuthor(String author) {
+<span class="fc" id="L35">        return storage.values().stream()</span>
+<span class="fc" id="L36">                .filter(book -&gt; book.getAuthor().equalsIgnoreCase(author))</span>
+<span class="fc" id="L37">                .collect(Collectors.toList());</span>
+    }
+
+    @Override
+    public List&lt;Book&gt; findByGenre(String genre) {
+<span class="fc" id="L42">        return storage.values().stream()</span>
+<span class="fc" id="L43">                .filter(book -&gt; book.getGenre().equalsIgnoreCase(genre))</span>
+<span class="fc" id="L44">                .collect(Collectors.toList());</span>
+    }
+
+    @Override
+    public List&lt;Book&gt; findAvailable() {
+<span class="fc" id="L49">        return storage.values().stream()</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">                .filter(book -&gt; book.getAvailableCopies() &gt; 0)</span>
+<span class="fc" id="L51">                .collect(Collectors.toList());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RepositoryFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartLibraryManagementSystem</a> &gt; <a href="index.source.html" class="el_package">za.ac.cput.factories</a> &gt; <span class="el_source">RepositoryFactory.java</span></div><h1>RepositoryFactory.java</h1><pre class="source lang-java linenums">package za.ac.cput.factories;
+
+import za.ac.cput.repositories.BookRepository;
+import za.ac.cput.repositories.inmemory.InMemoryBookRepository;
+
+<span class="nc" id="L6">public class RepositoryFactory {</span>
+
+    public static BookRepository getBookRepository(String storageType) {
+<span class="fc bfc" id="L9" title="All 3 branches covered.">        switch (storageType.toUpperCase()) {</span>
+            case &quot;MEMORY&quot;:
+<span class="fc" id="L11">                return new InMemoryBookRepository();</span>
+            case &quot;DATABASE&quot;:
+<span class="fc" id="L13">                return new DatabaseBookRepository();</span>
+            default:
+<span class="fc" id="L15">                throw new IllegalArgumentException(&quot;Unknown storage type: &quot; + storageType);</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>
